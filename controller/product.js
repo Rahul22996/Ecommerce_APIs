@@ -52,8 +52,9 @@ exports.updateProduct = async function (req, res, next) {
         if (req.file) {
             req.body.image = req.file.filename
         }
+        let pid = req.params.id
         
-        const data = await PRODUCT.findByIdAndUpdate(req.query.id, req.body, { new: true });
+        const data = await PRODUCT.findByIdAndUpdate(pid, req.body, { new: true });
 
         res.status(201).json({
             status: "Success",
@@ -72,8 +73,9 @@ exports.updateProduct = async function (req, res, next) {
 
 exports.deleteProduct = async function (req, res, next) {
     try {
+        let pid = req.params.id
 
-        const data = await PRODUCT.findByIdAndDelete(req.query.id);
+        const data = await PRODUCT.findByIdAndDelete(pid);
 
         res.status(201).json({
             status: "Success",

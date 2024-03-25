@@ -51,8 +51,8 @@ exports.updateCategory = async function (req, res, next) {
         if (req.file) {
             req.body.image = req.file.filename
         }
-
-        const data = await CATEGORY.findByIdAndUpdate(req.query.id, req.body, { new: true });
+        let cid = req.params.id
+        const data = await CATEGORY.findByIdAndUpdate(cid, req.body, { new: true });
 
         res.status(201).json({
             status: "Success",
@@ -71,8 +71,9 @@ exports.updateCategory = async function (req, res, next) {
 
 exports.deleteCategory = async function (req, res, next) {
     try {
+        let cid = req.params.id
 
-        const data = await CATEGORY.findByIdAndDelete(req.query.id);
+        const data = await CATEGORY.findByIdAndDelete(cid);
 
         res.status(201).json({
             status: "Success",

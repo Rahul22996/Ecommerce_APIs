@@ -19,9 +19,9 @@ const storage = multer.diskStorage({
 
 /* GET products listing. */
 
-router.get('/', productController.showProduct);
-router.post('/', upload.single('image'), productController.addProduct);
-router.patch('/', upload.single('image'), productController.updateProduct);
-router.delete('/', productController.deleteProduct);
+router.post('/add_product', upload.single('image'), productController.addProduct);
+router.get('/show_product', productController.showProduct);
+router.patch('/update_product/:id', upload.single('image'), productController.updateProduct);
+router.delete('/delete_product/:id', productController.deleteProduct);
 
 module.exports = router;                 
