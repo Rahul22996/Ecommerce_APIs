@@ -4,8 +4,8 @@ const cartController = require('../controller/Cart')
 
 /* GET users listing. */
 
-router.post('/add_cart/:id', cartController.addtoCart);
-router.get('/showcart', cartController.showCart);
-router.delete('/delete_cart/:id', cartController.deleteProduct);
+router.post('/add_cart/:uid/:pid', cartController.addto_Cart);
+router.post('/show_cart/:uid', cartController.show_Cart);
+router.post('/remove_product/:uid/:pid', cartController.remove_product);
 
 module.exports = router;             

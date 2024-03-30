@@ -1,62 +1,69 @@
 const CART = require('../model/cart')
-var Storage = require('node-persist');Storage.init()
+var Storage = require('node-persist'); Storage.init()
 
-exports.addtoCart = async function (req, res, next) {
+exports.addto_Cart = async function (req, res, next) {
     try {
-        var uid = await Storage.getItem('uid')
-        req.body.uid = uid
-        var pid = req.params.id
-        req.body.pid = pid
-
-        const data = await CART.create(req.body)
-
+        let userid = req.params.uid
+        let p_id = req.params.pid
+        let data = await CART.findOneAndUpdate(
+            { "uid": userid },
+            { $push: { "product": p_id } },
+            { new: true })
+        console.log(data);
         res.status(201).json({
-            status : "Success",
-            message : "Item Added to Cart",
-            data : data
+            status: "Success",
+            message: "Item Added to Cart",
+            data
         })
     } catch (error) {
         res.status(404).json({
-            status : "Fail",
-            message : "Fail to Add Item"
+            status: "Fail",
+            message: "Fail to Add Item"
         })
     }
 }
 
-exports.showCart = async function (req, res, next) {
+exports.show_Cart = async function (req, res, next) {
     try {
-        var uid = await Storage.getItem('uid')
-        console.log(uid)
+        let userid = req.params.uid
 
-        const data = await CART.find({"uid" : uid})
-
+        const data = await CART.findOne({ "uid": userid }).populate('product')
+        
         res.status(201).json({
-            status : "Success",
-            message : "User's Cart",
-            data : data
+            status: "Success",
+            message: "User's Cart",
+            data
         })
     } catch (error) {
         res.status(404).json({
-            status : "Fail",
-            message : "Fail to Load Cart"
+            status: "Fail",
+            message: "Fail to Load Cart"
         })
     }
 }
 
-exports.deleteProduct = async function (req, res, next) {
+exports.remove_product = async function (req, res, next) {
     try {
-        var id = req.params.id     
-        const data = await CART.findByIdAndDelete(id)
+
+        let userid = req.params.uid
+        let pid = req.params.pid
+
+        const data = await CART.findOneAndUpdate(
+            { "uid": userid },
+            { $pull: { product: pid } },
+            { new: true } // Return the modified document
+        );
+        console.log(data);
 
         res.status(201).json({
-            status : "Success",
-            message : "Product is Deleted",
-            data : data
+            status: "Success",
+            message: "Product is Removed",
+            data
         })
     } catch (error) {
         res.status(404).json({
-            status : "Fail",
-            message : "Fail to Load Cart"
+            status: "Fail",
+            message: "Fail to Remove"
         })
     }
 }

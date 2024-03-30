@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const categoryController = require('../controller/Category');
+const companyController = require('../controller/company');
 const multer  = require('multer')
 
 /* Multer Storage */
@@ -19,9 +20,14 @@ const storage = multer.diskStorage({
 
 /* GET categories listing. */
 
-router.post('/add_category', upload.single('image'), categoryController.addCategory);
-router.get('/show_category', categoryController.showCategory);
-router.patch('/update_category/:id', upload.single('image'), categoryController.updateCategory);
-router.delete('/delete_category/:id', categoryController.deleteCategory);
+router.post('/add_category', upload.single('image'), categoryController.add_Category);
+router.get('/show_category', categoryController.show_All_Category);
+router.patch('/update_category/:cid', upload.single('image'), categoryController.update_Category);
+router.delete('/delete_category/:cid', categoryController.delete_Category);
+
+router.post('/add_company', upload.single('image'), companyController.add_Company);
+router.get('/show_company', companyController.show_Company);
+router.patch('/update_company/:cid', upload.single('image'), companyController.update_Company);
+router.delete('/delete_company/:cid', companyController.delete_Company);
 
 module.exports = router;                 

@@ -1,19 +1,19 @@
-const CATEGORY = require('../model/category');
+const COMPANY = require('../model/company');
 
 // -------------------------------------------------------------------------------------------------------------
 
-exports.add_Category = async function (req, res, next) {
+exports.add_Company = async function (req, res, next) {
     try {
         req.body.image = req.file.filename
         if (!req.body.name || !req.body.image) {
             throw new Error("Please Enter Valid Fields")
         }
 
-        const data = await CATEGORY.create(req.body);
+        const data = await COMPANY.create(req.body);
 
         res.status(201).json({
             status: "Success",
-            message: "Category Added",
+            message: "Company Added",
             data
         })
     } catch (error) {
@@ -26,14 +26,14 @@ exports.add_Category = async function (req, res, next) {
 
 // -------------------------------------------------------------------------------------------------------------
 
-exports.show_All_Category = async function (req, res, next) {
+exports.show_Company = async function (req, res, next) {
     try {
 
-        const data = await CATEGORY.find();
+        const data = await COMPANY.find();
 
         res.status(201).json({
             status: "Success",
-            message: "All Categories",
+            message: "All Companies",
             data
         })
     } catch (error) {
@@ -46,17 +46,17 @@ exports.show_All_Category = async function (req, res, next) {
 
 // -------------------------------------------------------------------------------------------------------------
 
-exports.update_Category = async function (req, res, next) {
+exports.update_Company = async function (req, res, next) {
     try {
         if (req.file) {
             req.body.image = req.file.filename
         }
         let cid = req.params.cid
-        const data = await CATEGORY.findByIdAndUpdate(cid, req.body, { new: true });
+        const data = await COMPANY.findByIdAndUpdate(cid, req.body, { new: true });
 
         res.status(201).json({
             status: "Success",
-            message: "Category Updated",
+            message: "Company Updated",
             data
         })
     } catch (error) {
@@ -69,15 +69,15 @@ exports.update_Category = async function (req, res, next) {
 
 // -------------------------------------------------------------------------------------------------------------
 
-exports.delete_Category = async function (req, res, next) {
+exports.delete_Company = async function (req, res, next) {
     try {
         let cid = req.params.cid
 
-        const data = await CATEGORY.findByIdAndDelete(cid);
+        const data = await COMPANY.findByIdAndDelete(cid);
 
         res.status(201).json({
             status: "Success",
-            message: "Category Deleted",
+            message: "Company Deleted",
             data
         })
     } catch (error) {

@@ -1,4 +1,5 @@
 const USER = require('../model/User')
+const CART = require("../model/cart")
 const bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken');
 var Storage = require('node-persist');Storage.init()
@@ -19,12 +20,17 @@ exports.Signup = async function (req, res, next) {
         req.body.password = await bcrypt.hash(req.body.password, 9)
 
         const data = await USER.create(req.body);
-        // var token = jwt.sign({ id: data._id }, 'pass');
+
+        let user_id = data._id
+        req.body.uid = user_id
+
+        let cart = await CART.create(req.body)
+
         res.status(201).json({
             status: "Success",
             message: "Signup Successful",
-            data: data
-            // token
+            data,
+            cart
         })
     } catch (error) {
         res.status(404).json({
@@ -42,7 +48,6 @@ exports.Login = async function (req, res, next) {
         }
 
         const checkUser = await USER.findOne({ email: req.body.email });
-        // console.log(checkUser.id)
         var uid = await Storage.setItem('uid', checkUser.id)
         
         console.log(uid)
@@ -57,12 +62,10 @@ exports.Login = async function (req, res, next) {
             throw new Error("Wrong Password")
         }
 
-        // var token = jwt.sign({ id: checkUser._id }, 'pass');
         res.status(201).json({
             status: "Success",
             message: "Login Successful",
-            data: checkUser
-            // token
+            checkUser
         })
     } catch (error) {
         res.status(404).json({
@@ -72,45 +75,45 @@ exports.Login = async function (req, res, next) {
     }
 }
 
-exports.oneUser = async function (req, res, next) {
-    try {
-        const data = await USER.findById(req.userId);
+// exports.oneUser = async function (req, res, next) {
+//     try {
+//         const data = await USER.findById(req.userId);
         
-        res.status(201).json({
-            status: "Success",
-            message: "All Users",
-            data: data
-        })
-    } catch (error) {
-        res.status(404).json({
-            status: "Fail",
-            message: error.message
-        })
-    }
-}
+//         res.status(201).json({
+//             status: "Success",
+//             message: "All Users",
+//             data
+//         })
+//     } catch (error) {
+//         res.status(404).json({
+//             status: "Fail",
+//             message: error.message
+//         })
+//     }
+// }
 
-exports.Secure = async function (req, res, next) {
-    try {
-        const token = req.headers.token
-        if (!token) {
-            throw new Error("Please Get A Token")
-        }
+// exports.Secure = async function (req, res, next) {
+//     try {
+//         const token = req.headers.token
+//         if (!token) {
+//             throw new Error("Please Get A Token")
+//         }
 
-        var decoded = jwt.verify(token, 'pass');
+//         var decoded = jwt.verify(token, 'pass');
 
-        const checkUser = await USER.findById(decoded.id)
+//         const checkUser = await USER.findById(decoded.id)
 
-        if (!checkUser) {
-            throw new Error("User not Found")
-        }
+//         if (!checkUser) {
+//             throw new Error("User not Found")
+//         }
 
-        req.userId = decoded.id
-        next()
+//         req.userId = decoded.id
+//         next()
 
-    } catch (error) {
-        res.status(404).json({
-            status: "Fail",
-            message: error.message
-        })
-    }
-}
+//     } catch (error) {
+//         res.status(404).json({
+//             status: "Fail",
+//             message: error.message
+//         })
+//     }
+// }
