@@ -51,7 +51,7 @@ exports.show_All_Product = async function (req, res, next) {
 exports.show_one_Product = async function (req, res, next) {
     try {
         let p_id = req.params.pid
-        const data = await PRODUCT.findOne({"_id" : p_id}).populate('reviews');
+        const data = await PRODUCT.findOne({ "_id": p_id }).populate('reviews');
 
         res.status(201).json({
             status: "Success",
@@ -71,7 +71,7 @@ exports.show_one_Product = async function (req, res, next) {
 exports.show_Company_Product = async function (req, res, next) {
     try {
         let comp_id = req.params.cid
-        const data = await PRODUCT.find({"company" : comp_id}).populate('company');
+        const data = await PRODUCT.find({ "company": comp_id }).populate('company');
 
         res.status(201).json({
             status: "Success",
@@ -91,9 +91,9 @@ exports.show_Company_Product = async function (req, res, next) {
 exports.show_Category_Product = async function (req, res, next) {
     try {
         let cat_id = req.params.cid
-        const data = await PRODUCT.find({"category" : cat_id}).populate('category');
-        
-          console.log(data);
+        const data = await PRODUCT.find({ "category": cat_id }).populate('category');
+
+        console.log(data);
 
         res.status(201).json({
             status: "Success",
@@ -116,7 +116,7 @@ exports.update_Product = async function (req, res, next) {
             req.body.image = req.file.filename
         }
         let pid = req.params.pid
-        
+
         const data = await PRODUCT.findByIdAndUpdate(pid, req.body, { new: true });
 
         res.status(201).json({
@@ -160,11 +160,11 @@ exports.add_review = async function (req, res, next) {
         let user_id = req.params.uid
         let p_id = req.params.pid
         req.body.uid = user_id
-        
+
         if (!req.body.review) {
             throw new Error("Please Enter Valid Fields")
         }
-        
+
         const data = await REVIEW.create(req.body);
 
         const data1 = await PRODUCT.findOneAndUpdate(
@@ -173,7 +173,7 @@ exports.add_review = async function (req, res, next) {
             { new: true }
         ).populate('reviews');
         console.log(data1);
-        
+
         res.status(201).json({
             status: "Success",
             message: "Review Added",
