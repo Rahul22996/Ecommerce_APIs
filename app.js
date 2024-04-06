@@ -14,7 +14,7 @@ var app = express();
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/E-commerce')
+mongoose.connect('mongodb+srv://rahulmakwana0037:8Ig7FSKmowg6zAnB@cluster0.hzt9pqu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('Connected!'));
 
 // view engine setup
